@@ -1,5 +1,5 @@
 [package]
-name = "modular_arithmetic"
+name = "modular_math"
 version = "0.1.0"
 authors = ["CleanPegasus <me@cleanpegasus.dev>"]
 description = "A simple modular arithmetic crate for U256"
