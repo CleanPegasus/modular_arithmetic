@@ -14,7 +14,7 @@ use primitive_types::U256;
 /// let result = mod_math.add(U256::from(8), U256::from(12));
 /// assert_eq!(result, U256::from(3));
 /// ```
-struct ModMath {
+pub struct ModMath {
     modulus: U256,
 }
 
@@ -119,6 +119,8 @@ impl ModMath {
         a % self.modulus == b % self.modulus
     }
 
+    // pub fn sqrt(&self, a: U256) -> U256 {}
+
 }
 
 #[cfg(test)]
@@ -170,5 +172,18 @@ mod tests {
         let b = U256::from(10);
         let b_inv = math.inv(a).unwrap();
         assert_eq!(math.mul(b, b_inv), U256::one());
+    }
+
+    fn test_div() {
+        let modulus = U256::from(101);
+        let math = ModMath::new(modulus);
+
+        let a = U256::from(10);
+        let b = U256::from(20);
+        assert_eq!(math.divide(a, b), U256::from(5));
+
+        let a = U256::from(10);
+        let b = U256::from(10);
+        assert_eq!(math.divide(a, b), U256::one());
     }
 }
