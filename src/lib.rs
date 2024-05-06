@@ -90,9 +90,9 @@ impl ModMath {
         let mut exponent = exponent;
         while exponent != U256::zero() {
             if exponent % U256::from(2) != U256::zero() {
-                result = (result * base) % self.modulus;
+                result = self.mul(result, base)
             }
-            base = (base * base) % self.modulus;
+            base = self.square(base);
             exponent = exponent / U256::from(2);
         }
         result
@@ -160,7 +160,9 @@ impl ModMath {
         U256::from_little_endian(&result_little_endian[..32])
     }
 
-    // pub fn sqrt(&self, a: U256) -> U256 {}
+    pub fn sqrt(&self, a: U256) -> U256 {
+        unimplemented!()
+    }
 
 }
 
