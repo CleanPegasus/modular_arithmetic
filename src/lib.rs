@@ -110,18 +110,14 @@ impl ModMath {
     
         while a > U256::one() {
             let q = a / m;
-            println!("Entered here");
             let mut temp = m;
     
             m = a % m;
             a = temp;
-            dbg!(a);
             temp = x0;
             // let t = (q * x0) % self.modulus;
             let t = self.mul(q, x0);
-            dbg!(t);
             x0 = self.sub(x1, t);
-            dbg!(x0);
             x1 = temp;
         }
     
