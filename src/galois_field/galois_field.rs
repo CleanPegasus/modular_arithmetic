@@ -1,18 +1,23 @@
-use super::mod_math::ModMath;
+use crate::mod_math::ModMath;
+use crate::num_mod::NM;
 use primitive_types::U256;
 use rand::{prelude::*, rngs::OsRng};
 
-struct GaloisField {
+pub struct GaloisField {
     modulus: U256,
 }
 
 impl GaloisField {
+
     pub fn new(modulus: U256) -> Option<Self> {
-      let mod_math = ModMath::new(modulus);
       match Self::is_prime(modulus, 5) {
         true => Some(Self{modulus}),
         false => None
       }
+    }
+
+    pub fn gf(&self, value: U256) -> NM {
+        NM::new(value, self.modulus)
     }
 
     fn is_prime(modulus: U256, k: usize) -> bool {

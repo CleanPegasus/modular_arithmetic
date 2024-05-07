@@ -1,9 +1,7 @@
 
-use crate::mod_math::IntoU256;
+use crate::mod_math::{IntoU256, ModMath};
 
-use super::mod_math::ModMath;
 use primitive_types::U256;
-use rand::{prelude::*, rngs::OsRng};
 use std::ops::{Add, Mul, Sub, Div, Neg};
 use std::cmp::PartialEq;
 
@@ -105,3 +103,11 @@ impl PartialEq for NumberUnderMod {
     self.value == other.value && self.modulus == other.modulus
   }
 }
+
+#[macro_export]
+macro_rules! num_mod {
+    ($value:expr, $modulus:expr) => {
+        NM::new($value, $modulus)
+    };
+}
+
