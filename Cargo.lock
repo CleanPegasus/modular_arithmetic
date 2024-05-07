@@ -138,6 +138,7 @@ name = "modular_math"
 version = "0.1.5"
 dependencies = [
  "primitive-types",
+ "rand",
 ]
 
 [[package]]

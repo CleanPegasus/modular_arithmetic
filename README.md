@@ -69,6 +69,12 @@ let exp = mod_math.exp(8, 12);
 assert_eq!(exp, U256::from(64));
 ```
 
+## Todo
+- [ ] Square root under modulus
+- [ ] Additive Inverse
+- [ ] BigNumber Tests
+- [ ] Galois Field
+
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
