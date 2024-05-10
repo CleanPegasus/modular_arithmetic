@@ -98,7 +98,7 @@ impl ModMath {
                 result = self.mul(result, base)
             }
             base = self.square(base);
-            exponent = exponent / U256::from(2);
+            exponent /= U256::from(2);
         }
         result
     }
@@ -176,10 +176,144 @@ impl ModMath {
         U256::from_little_endian(&result_little_endian[..32])
     }
 
-    pub fn sqrt(&self, a: U256) -> U256 {
-        unimplemented!()
+    pub fn sqrt<T: IntoU256>(&self, a: T) -> Option<U256> {
+       
+       let a = a.into_u256();
+
+       if self.modulus % U256::from(4) == U256::from(3) { // p = 4k + 3
+        let exponent = Self::floor_div(self.modulus + U256::one(), U256::from(4));
+        return Some(self.exp(a, exponent));
+       } else {
+        // Tonelli Shanks Algorithm
+        return self.tonelli_shanks(a);
+       }
     }
 
+    fn floor_div(a: U256, b: U256) -> U256 {
+        assert!(b != U256::zero(), "Division by zero error");
+        let div = a / b;
+        if a % b != U256::zero() && (a < U256::zero()) != (b < U256::zero()) {
+            div - U256::one()
+        } else {
+            div
+        }
+    }
+
+    // utility function to find gcd 
+    fn gcd(a: U256, b: U256) -> U256 {
+        if b == U256::zero() {
+            return a;
+        } else {
+            return Self::gcd(b, a % b)
+        }
+    }
+
+    // Returns k such that a^k = 1 (mod p)
+    fn order(&self, a: U256) -> Option<U256> {
+        if Self::gcd(a, self.modulus) != U256::one() {
+            return None;
+        }
+
+        let mut k = U256::one();
+        loop {
+            if self.exp(a, k) == U256::one() {
+                return Some(k);
+            }
+            k += U256::one();
+        }
+    }
+
+    fn convertx2e(mut x: U256) -> (U256, U256) {
+        let mut z = U256::zero();
+        while x % U256::from(2) == U256::zero() {
+            x = x / U256::from(2);
+            z += U256::one();
+        } 
+        (x, z)
+    }
+
+    fn legendre_symbol(&self, a: U256) -> i32 {
+        let exponent = (self.modulus - U256::one()) / U256::from(2);
+        let result = self.exp(a, exponent);
+        
+        if result == U256::one() {
+            1
+        } else if result == U256::zero() {
+            0
+        } else {
+            -1
+        }
+    }
+
+    fn tonelli_shanks(&self, a: U256) -> Option<U256> {
+        
+        if self.modulus == U256::from(2) {
+            return Some(a)
+        }
+
+        if Self::gcd(a, self.modulus) != U256::one() {
+            return None
+        }
+
+        match self.legendre_symbol(a) {
+            -1 => return None,
+            0 => return Some(U256::zero()),
+            _ => (),
+        }
+
+        let (s, e) = Self::convertx2e(self.modulus - U256::one());
+        let mut q = U256::from(2);
+
+        loop {
+            let exponent = (self.modulus - U256::one()) / U256::from(2);
+            if self.exp(q, exponent) == self.modulus - U256::one() {
+                break;
+            }
+            q += U256::one();
+        }
+
+        let exp_a = (s + U256::one()) / U256::from(2);
+        let mut x = self.exp(a, exp_a);
+        let mut b = self.exp(a, s);
+        let mut g = self.exp(q, s);
+
+        let mut r = e;
+
+        loop {
+            let mut m = U256::zero();
+
+            while (m < r) {
+                if self.order(b).is_none() {
+                    return None
+                }
+
+                if self.order(b).unwrap() == U256::from(2).pow(m) {
+                    break;
+                }
+                m += U256::one();
+            }
+
+            if m == U256::zero() {
+                return Some(x);
+            }
+
+            let exp_x = self.exp(U256::from(2), r - m - U256::one());
+            x = self.mul(x, self.exp(g, exp_x));
+            
+            let exp_g = self.exp(U256::from(2), r - m);
+            g = self.exp(g, exp_g);
+            b = self.mul(b, g);
+
+            if b == U256::one() {
+                return Some(x);
+            }
+            r = m;
+        }
+
+
+    }
+
+    
 }
 
 

@@ -107,6 +107,15 @@ mod tests {
         assert_eq!(math.square(10), U256::from(0));
     }
 
+    #[test]
+    fn test_sqrt() {
+        let math = ModMath::new(113);
+        let num = 2;
+        let mod_sqrt = math.sqrt(num).unwrap();
+        println!("{}", mod_sqrt);
+        assert_eq!(math.exp(mod_sqrt, U256::from(2)), U256::from(num));
+    }
+
     // #[test]
     // fn test_big_number_addition() {
     //     let math = ModMath::new(U256::max_value());
