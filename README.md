@@ -73,6 +73,7 @@ assert_eq!(exp, U256::from(64));
 - [ ] Square root under modulus
 - [ ] Additive Inverse
 - [ ] BigNumber Tests
+- [ ] Elliptic Curves
 - [ ] Galois Field
 
 ## License
