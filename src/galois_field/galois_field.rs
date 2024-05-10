@@ -1,60 +1,68 @@
-use crate::mod_math::ModMath;
-use crate::num_mod::NM;
+use crate::mod_math::{ModMath, IntoU256};
+use crate::num_mod::{NumberUnderMod as NM};
 use primitive_types::U256;
-use rand::{prelude::*, rngs::OsRng};
+use std::collections::HashMap;
+use std::error::Error;
 
+#[derive(Debug)]
 pub struct GaloisField {
     modulus: U256,
 }
 
 impl GaloisField {
 
-    pub fn new(modulus: U256) -> Option<Self> {
-      match Self::is_prime(modulus, 5) {
-        true => Some(Self{modulus}),
-        false => None
-      }
+    pub fn new<T: IntoU256>(modulus: T) -> Option<Self> { // TODO: Change to Result<Self, Err>
+        let modulus = modulus.into_u256();
+        if Self::is_valid_galois_field_size(modulus) {
+            return Some(Self { modulus });
+        } else {
+            None
+        }
     }
 
     pub fn gf(&self, value: U256) -> NM {
         NM::new(value, self.modulus)
     }
 
-    fn is_prime(modulus: U256, k: usize) -> bool {
-        // Miller-Rabin Primality test
+    fn prime_factors(mut n: U256) -> HashMap<U256, U256> {
+        let mut factors = HashMap::new();
+        let mut count: U256;
 
-        if modulus < U256::from(2) {
-            return false;
+        count = U256::zero();
+        while n % U256::from(2) == U256::zero() {
+            count += U256::one();
+            n /= U256::from(2);
         }
-        if modulus % U256::from(2) == U256::zero() {
-            return modulus == U256::from(2);
-        }
-
-        let mut d = modulus - U256::one();
-        let mut s = 0;
-
-        while d % U256::from(2) == U256::zero() {
-            d /= U256::from(2);
-            s += 1;
+        if count > U256::zero() {
+            factors.insert(U256::from(2), count);
         }
 
-        'outer: for _ in 0..k {
-            let a = U256::from(rand::thread_rng().gen_range(2..modulus.as_u128() as u128));
-            let mod_math = ModMath::new(modulus);
-            // let mut x = mod_exp(U256::from(a), d, n);
-            let mut x = mod_math.exp(U256::from(a), d);
-            if x == U256::one() || x == modulus - U256::one() {
-                continue;
+        let mut i = U256::from(3);
+        while i * i <= n {
+            count = U256::zero();
+            while n % i == U256::zero() {
+                count += U256::one();
+                n /= i;
             }
-            for _ in 0..s - 1 {
-                x = mod_math.exp(x, U256::from(2));
-                if x == modulus - U256::one() {
-                    continue 'outer;
-                }
+            if count > U256::zero() {
+                factors.insert(i, count);
             }
-            return false;
+            i += U256::from(2);
         }
-        true
+
+        if n > U256::from(2) {
+            factors.insert(n, U256::from(1));
+        }
+    
+        factors
+    }
+    
+    fn is_valid_galois_field_size(n: U256) -> bool {
+        let factors = Self::prime_factors(n);
+        factors.len() == 1 && factors.values().all(|&count| count >= U256::from(1))
     }
 }
 
+pub enum GaloisFieldError {
+    InvalidModulus
+}

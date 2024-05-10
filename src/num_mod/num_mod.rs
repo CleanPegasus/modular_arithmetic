@@ -107,7 +107,7 @@ impl PartialEq for NumberUnderMod {
 #[macro_export]
 macro_rules! num_mod {
     ($value:expr, $modulus:expr) => {
-        NM::new($value, $modulus)
+        NumberUnderMod::new($value, $modulus)
     };
 }
 
