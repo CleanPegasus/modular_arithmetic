@@ -1,6 +1,6 @@
 # Modular Arithmetic Library
 
-![crates.io](https://img.shields.io/crates/v/modular_math.svg)  [![Docs.rs](https://docs.rs/crate_name/badge.svg)](https://docs.rs/modular_math/0.1.5/)
+![crates.io](https://img.shields.io/crates/v/modular_math.svg)  [![Docs.rs](https://docs.rs/crate_name/badge.svg)](https://docs.rs/modular_math/0.1.6/)
 
 
 `modular_math` is a Rust library designed for high-performance modular arithmetic operations on 256-bit integers (`U256`). This library provides robust functionalities such as
