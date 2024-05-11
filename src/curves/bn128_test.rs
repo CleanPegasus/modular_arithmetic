@@ -9,8 +9,9 @@ mod tests {
     let G = bn128.G;
 
     let double_G = bn128.add_points(&G, &G);
+    let triple_G = bn128.add_points(&double_G, &G);
 
-    dbg!(double_G);
+    dbg!(triple_G);
   }
 
   #[test]
