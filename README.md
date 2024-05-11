@@ -135,23 +135,23 @@ use modular_math::num_mod;
 let a = num_mod!(10, 13);
 let b = num_mod!(6, 13);
 let sum = a + b;
-assert_eq!(sum, U256::from(3));
+assert_eq!(sum, num_mod!(3, 13));
 
 // Sub
 let sub = a - b;
-assert_eq!(sub, U256::from(4));
+assert_eq!(sub, num_mod!(4, 13));
 
 // Mul
 let mul = a * b;
-assert_eq!(mul, U256::from(8));
+assert_eq!(mul, num_mod!(8, 13));
 
 // Div
 let div = a / b;
-assert_eq!(div, U256::from(11));
+assert_eq!(div, num_mod!(11, 13));
 
 // Neg
 let neg = -a;
-assert_eq!(neg, U256::from(3));
+assert_eq!(neg, num_mod!(3, 13));
 
 let c = num_mod!(10, 13);
 assert!(a == c);
