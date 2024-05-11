@@ -1,5 +1,5 @@
 use crate::mod_math::{ModMath, IntoU256};
-use crate::num_mod::{NumberUnderMod as NM};
+use crate::number_mod::{NumberUnderMod as NM};
 use primitive_types::U256;
 use std::collections::HashMap;
 use std::error::Error;
@@ -7,6 +7,10 @@ use std::error::Error;
 #[derive(Debug)]
 pub struct GaloisField {
     modulus: U256,
+}
+
+pub struct GaloisFieldPolynomial {
+    polynomial: Vec<U256>,
 }
 
 impl GaloisField {
@@ -23,6 +27,13 @@ impl GaloisField {
     pub fn gf(&self, value: U256) -> NM {
         NM::new(value, self.modulus)
     }
+
+    pub fn poly<T: IntoU256>(&self, coefficients: Vec<T>) -> GaloisFieldPolynomial {
+        todo!(
+            "Implement Galois Polynomial Function"
+        )
+    }
+
 
     fn prime_factors(mut n: U256) -> HashMap<U256, U256> {
         let mut factors = HashMap::new();
