@@ -8,9 +8,7 @@ pub struct ModMath {
     modulus: U256,
 }
 
-
 impl ModMath {
-    // TODO: Take generic modulus and convert it to U256
     /// Creates a new `ModMath` instance with the given modulus.
     ///
     /// # Panics
@@ -149,8 +147,8 @@ impl ModMath {
          self.mul(a.into_u256(), b_inv)
     }
 
+    /// Calculates the additive inverse of a given `U256` under modulus
     pub fn add_inv<T: IntoU256>(&self, a: T) -> U256 {
-      // self.modulus - a.into_u256()
       let a = a.into_u256();
       if a == U256::zero() {
         U256::zero()
@@ -176,6 +174,8 @@ impl ModMath {
         U256::from_little_endian(&result_little_endian[..32])
     }
 
+    /// Find the square root of a given `U256` under modulus using tonelli-shanks algorithm
+    /// returns None if no sqrt exists
     pub fn sqrt<T: IntoU256>(&self, a: T) -> Option<U256> {
        
        let a = a.into_u256();
