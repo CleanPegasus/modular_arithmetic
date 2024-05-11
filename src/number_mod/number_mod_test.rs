@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use crate::num_mod::NumberUnderMod;
+    use crate::number_mod::{NumberUnderMod};
     use primitive_types::U256;
     use crate::num_mod;
 
@@ -17,7 +17,7 @@ mod tests {
         let num1 = NumberUnderMod::new(10, 13);
         let num2 = NumberUnderMod::new(6, 13);
         let result = num1 - num2;
-        assert_eq!(result.unwrap(), num_mod!(3, 13));
+        assert_eq!(result.unwrap(), num_mod!(4, 13));
     }
 
     #[test]
@@ -30,10 +30,10 @@ mod tests {
 
     #[test]
     fn test_division() {
-        let num1 = NumberUnderMod::new(10, 13);
-        let num2 = NumberUnderMod::new(6, 13);
+        let num1 = NumberUnderMod::new(10, 101);
+        let num2 = NumberUnderMod::new(20, 101);
         let result = num1 / num2;
-        assert_eq!(result.unwrap(), num_mod!(5, 13));
+        assert_eq!(result.unwrap(), num_mod!(51, 101));
     }
 
     #[test]

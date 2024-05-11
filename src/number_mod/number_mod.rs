@@ -4,13 +4,34 @@ use crate::mod_math::{IntoU256, ModMath};
 use primitive_types::U256;
 use std::ops::{Add, Mul, Sub, Div, Neg};
 use std::cmp::PartialEq;
-
+/// `NumberUnderMod` represents a number under a certain modulus.
+///
+/// This struct provides methods for performing arithmetic operations
+/// (addition, subtraction, multiplication, division, and negation)
+/// under the modulus.
+///
+/// # Examples
+///
+/// let num1 = NumberUnderMod::new(5, 7);
+/// let num2 = NumberUnderMod::new(3, 7);
+/// let result = num1 + num2;
+/// assert_eq!(result.unwrap().value, 1);
 #[derive(Debug)]
 pub struct NumberUnderMod {
     value: U256,
     modulus: U256,
 }
 
+/// Creates a new `NumberUnderMod` with the given value and modulus.
+    ///
+    /// The value is automatically reduced modulo the modulus.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let num = NumberUnderMod::new(10, 7);
+    /// assert_eq!(num.value, 3);
+    /// ```
 impl NumberUnderMod {
     pub fn new<T: IntoU256>(value: T, modulus: T) -> Self {
       let value = value.into_u256();
@@ -103,6 +124,16 @@ impl PartialEq for NumberUnderMod {
     self.value == other.value && self.modulus == other.modulus
   }
 }
+
+/// num_mod is a convenience macro for creating a new NumberUnderMod instance. 
+/// # Arguments 
+/// * $value - The value of the number.
+/// * $modulus - The modulus under which the number is considered. 
+/// # Examples 
+/// let num = num_mod!(10, 6); 
+/// assert_eq!(num.value(), 4); 
+/// This example creates a new NumberUnderMod with a value of 10 under modulus 6. 
+/// The value is automatically reduced modulo 6, so the resulting NumberUnderMod has a value of 4.
 
 #[macro_export]
 macro_rules! num_mod {
