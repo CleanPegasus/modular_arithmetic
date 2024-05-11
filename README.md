@@ -4,7 +4,7 @@
 
 
 `modular_math` is a Rust library designed for high-performance modular arithmetic operations on 256-bit integers (`U256`). This library provides robust functionalities such as
-- Modular Arithmetic
+- [Modular Arithmetic](#modmath)
   - addition
   - subtraction
   - multiplication
@@ -14,7 +14,7 @@
   - square
   - square root (tonelli shanks algorithm)
   - equivalent (congruent)
-- Elliptical Curves
+- [Elliptical Curves](#elliptic-curves)
   - Point addition
   - Point doubling
   - Scalar multiplication
@@ -37,8 +37,8 @@ under a specified modulus, specifically optimized for cryptographic and zero kno
 ## Structure
 The workspace is organized as follows:
 
-- src/curves/: Contains the implementation of elliptic curves and points on the curve.
-- src/galois_field/: Contains the implementation of Galois fields, which are used in the elliptic curve operations.
+- src/curves/: Contains the implementation of elliptic curves and points on the curve, BN128 and Secp256k1 Elliptic Curves.
+- src/galois_field/: Contains the implementation of Galois fields.
 - src/mod_math/: Contains modular arithmetic functions.
 - src/num_mod/: Contains the implementation of a number modulo some modulus.
 
